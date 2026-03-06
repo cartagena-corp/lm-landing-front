@@ -1,0 +1,158 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { data } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const testimonials = [
+    {
+        text: t("testimonials.1.text"),
+        name: t("testimonials.1.name"),
+        role: t("testimonials.1.role"),
+        rating: data.testimonials.rating,
+        avatar: "CG",
+    },
+    {
+        text: t("testimonials.2.text"),
+        name: t("testimonials.2.name"),
+        role: t("testimonials.2.role"),
+        rating: 5,
+        avatar: "AM",
+    },
+    {
+        text: t("testimonials.3.text"),
+        name: t("testimonials.3.name"),
+        role: t("testimonials.3.role"),
+        rating: 5,
+        avatar: "LP",
+    },
+];
+---
+
+<section class="testimonials section" id="testimonials">
+    <div class="container">
+        <h2 class="section-title reveal">{t("testimonials.title")}</h2>
+        <p class="section-sub reveal" data-delay="100">
+            {t("testimonials.sub")}
+        </p>
+
+        <div class="testimonials-grid">
+            {
+                testimonials.map((item, i) => (
+                    <article
+                        class="testimonial-card reveal"
+                        data-delay={String(i * 120)}
+                    >
+                        <div class="stars">
+                            {Array.from({ length: item.rating }).map(() => (
+                                <svg
+                                    class="star"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 18 18"
+                                    fill="var(--color-star)"
+                                >
+                                    <path d="M9 1.5l2.1 4.3 4.7.7-3.4 3.3.8 4.7L9 12.2 4.8 14.5l.8-4.7L2.2 6.5l4.7-.7L9 1.5z" />
+                                </svg>
+                            ))}
+                        </div>
+                        <p class="testimonial-text">"{item.text}"</p>
+                        <div class="testimonial-author">
+                            <div class="avatar">{item.avatar}</div>
+                            <div>
+                                <span class="author-name">{item.name}</span>
+                                <span class="author-role">{item.role}</span>
+                            </div>
+                        </div>
+                    </article>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-6);
+    }
+
+    .testimonial-card {
+        padding: var(--space-8);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        transition:
+            transform var(--transition-base),
+            box-shadow var(--transition-base);
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stars {
+        display: flex;
+        gap: 2px;
+        margin-bottom: var(--space-4);
+    }
+
+    .testimonial-text {
+        font-size: var(--fs-base);
+        color: var(--color-text);
+        line-height: 1.7;
+        margin-bottom: var(--space-6);
+        font-style: italic;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-full);
+        background: linear-gradient(
+            135deg,
+            var(--color-primary),
+            var(--color-accent)
+        );
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: var(--fs-sm);
+        flex-shrink: 0;
+    }
+
+    .author-name {
+        display: block;
+        font-weight: 600;
+        font-size: var(--fs-sm);
+        color: var(--color-text);
+    }
+
+    .author-role {
+        display: block;
+        font-size: var(--fs-xs);
+        color: var(--color-text-muted);
+    }
+
+    @media (max-width: 768px) {
+        .testimonials-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

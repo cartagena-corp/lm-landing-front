@@ -1,0 +1,107 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="cta-section" id="cta">
+    <div class="container">
+        <div class="cta-card reveal">
+            <h2 class="cta-title">{t("cta.title")}</h2>
+            <p class="cta-sub">{t("cta.sub")}</p>
+            <div class="cta-actions">
+                <a href="/${lang}/#demo" class="btn btn-primary btn-lg cta-btn"
+                    >{t("cta.primary")}</a
+                >
+                <a href="https://www.cartagenacorporation.com/login" class="btn btn-secondary btn-lg"
+                    >{t("cta.secondary")}</a
+                >
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .cta-section {
+        padding: var(--space-20) 0;
+    }
+
+    .cta-card {
+        text-align: center;
+        padding: var(--space-16) var(--space-8);
+        background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+        border-radius: var(--radius-2xl);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -30%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.08) 0%,
+            transparent 70%
+        );
+        pointer-events: none;
+    }
+
+    .cta-title {
+        font-size: var(--fs-4xl);
+        font-weight: 800;
+        margin-bottom: var(--space-4);
+        letter-spacing: -0.02em;
+        position: relative;
+    }
+
+    .cta-sub {
+        font-size: var(--fs-lg);
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto var(--space-8);
+        line-height: 1.7;
+        position: relative;
+    }
+
+    .cta-actions {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-4);
+        position: relative;
+    }
+
+    .cta-btn {
+        background: #fff;
+        color: var(--color-primary);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+    .cta-btn:hover {
+        background: #f0f4ff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        .cta-card {
+            padding: var(--space-10) var(--space-4);
+        }
+        .cta-title {
+            font-size: var(--fs-2xl);
+        }
+        .cta-actions {
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+</style>

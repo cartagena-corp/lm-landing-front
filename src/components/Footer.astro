@@ -1,0 +1,335 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="footer">
+    <div class="container footer-inner">
+        <!-- Top: Logo, Tagline & Newsletter Mockup -->
+        <div class="footer-header">
+            <div class="footer-brand-info">
+                <a href={`/${lang}/`} class="footer-logo">
+                    <img
+                        src="/favicon-white.webp"
+                        alt="LA MURALLA"
+                        width="48"
+                        height="48"
+                    />
+                    <span class="font-logo">LA MURALLA</span>
+                </a>
+                <p class="footer-tagline">{t("footer.tagline")}</p>
+            </div>
+            <div class="footer-newsletter">
+                <h4 class="newsletter-title">{t("footer.newsletter.title")}</h4>
+                <p class="newsletter-desc">{t("footer.newsletter.desc")}</p>
+                <div class="newsletter-input-group">
+                    <input
+                        type="email"
+                        placeholder={t("footer.newsletter.placeholder")}
+                    />
+                    <button type="button"
+                        >{t("footer.newsletter.button")}</button
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle: Links Columns Section -->
+        <!-- Middle: Links Columns Section -->
+        <!-- <div class="footer-main">
+            <div class="footer-columns">
+                <div class="footer-col">
+                    <h4 class="footer-col-title">{t("footer.product")}</h4>
+                    <ul>
+                        <li>
+                            <a href={`/${lang}/#features`}
+                                >{t("footer.product.features")}</a
+                            >
+                        </li>
+                        <li>
+                            <a href={`/${lang}/#pricing`}
+                                >{t("footer.product.pricing")}</a>
+                        </li>
+                        <li>
+                            <a href={`/${lang}/#workflow`}
+                                >{t("footer.product.integrations")}</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-col-title">{t("footer.company")}</h4>
+                    <ul>
+                        <li><a href="#">{t("footer.company.about")}</a></li>
+                        <li><a href="#">{t("footer.company.contact")}</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-col-title">{t("footer.legal")}</h4>
+                    <ul>
+                        <li><a href="#">{t("footer.legal.privacy")}</a></li>
+                        <li><a href="#">{t("footer.legal.terms")}</a></li>
+                        <li><a href="#">{t("footer.legal.cookies")}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Bottom: Social Icons & Copyright -->
+        <div class="footer-footer">
+            <p class="footer-copy">{t("footer.rights")}</p>
+            <div class="footer-socials">
+                <a href="#" aria-label="Twitter" class="social-link">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M4 4l11.733 16h4.267l-11.733-16zM4 20l6.768-6.768M20 4l-6.768 6.768"
+                        ></path></svg
+                    >
+                </a>
+                <a href="#" aria-label="LinkedIn" class="social-link">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"
+                        ></path><rect x="2" y="9" width="4" height="12"
+                        ></rect><circle cx="4" cy="4" r="2"></circle></svg
+                    >
+                </a>
+                <a href="#" aria-label="GitHub" class="social-link">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"
+                        ></path></svg
+                    >
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        background: #0f172a; /* Deeper slate for a professional feel */
+        color: #94a3b8;
+        padding-top: var(--space-20);
+        padding-bottom: var(--space-10);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-inner {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-16);
+    }
+
+    .footer-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-12);
+        align-items: start;
+        /* padding-bottom: var(--space-12); */
+        /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
+    }
+
+    .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        font-size: var(--fs-xl);
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: var(--space-4);
+    }
+
+    .footer-tagline {
+        font-size: var(--fs-base);
+        max-width: 320px;
+        line-height: 1.6;
+    }
+
+    .footer-newsletter {
+        max-width: 400px;
+        margin-left: auto;
+    }
+
+    .newsletter-title {
+        font-size: var(--fs-lg);
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: var(--space-2);
+    }
+
+    .newsletter-desc {
+        font-size: var(--fs-sm);
+        margin-bottom: var(--space-4);
+    }
+
+    .newsletter-input-group {
+        display: flex;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-lg);
+        padding: var(--space-1);
+        transition: border-color 0.3s ease;
+    }
+
+    .newsletter-input-group:focus-within {
+        border-color: var(--color-primary);
+    }
+
+    .newsletter-input-group input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: var(--space-2) var(--space-3);
+        color: #fff;
+        font-size: var(--fs-sm);
+        outline: none;
+    }
+
+    .newsletter-input-group button {
+        background: var(--color-primary);
+        color: #fff;
+        padding: var(--space-2) var(--space-5);
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: var(--fs-sm);
+        transition: opacity 0.3s ease;
+    }
+
+    .newsletter-input-group button:hover {
+        opacity: 0.9;
+    }
+
+    .footer-columns {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-8);
+    }
+
+    .footer-col-title {
+        font-size: var(--fs-sm);
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: var(--space-6);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .footer-col ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .footer-col a {
+        font-size: var(--fs-sm);
+        color: #94a3b8;
+        transition: color 0.3s ease;
+    }
+
+    .footer-col a:hover {
+        color: #fff;
+    }
+
+    .footer-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: var(--space-10);
+        margin-top: var(--space-4);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-copy {
+        font-size: var(--fs-xs);
+        color: #64748b;
+    }
+
+    .footer-socials {
+        display: flex;
+        gap: var(--space-4);
+    }
+
+    .social-link {
+        color: #94a3b8;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 50%;
+    }
+
+    .social-link:hover {
+        color: #fff;
+        background: var(--color-primary);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        .footer-header {
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: var(--space-8);
+        }
+        .footer-brand-info,
+        .footer-newsletter {
+            margin: 0 auto;
+        }
+        .footer-logo {
+            justify-content: center;
+        }
+        .footer-columns {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .footer-footer {
+            flex-direction: column-reverse;
+            gap: var(--space-6);
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .footer-columns {
+            grid-template-columns: 1fr;
+            gap: var(--space-8);
+            text-align: center;
+        }
+        .footer-newsletter {
+            width: 100%;
+        }
+    }
+</style>

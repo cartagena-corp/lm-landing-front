@@ -1,0 +1,105 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { data } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const stats = [
+    { value: data.stats.teams, label: t("stats.teams"), icon: "👥" },
+    { value: data.stats.tasks, label: t("stats.tasks"), icon: "✅" },
+    { value: data.stats.uptime, label: t("stats.uptime"), icon: "⚡" },
+    {
+        value: data.stats.satisfaction,
+        label: t("stats.satisfaction"),
+        icon: "❤️",
+    },
+];
+---
+
+<section class="stats section-alt" id="stats">
+    <div class="container">
+        <div class="stats-grid">
+            {
+                stats.map((stat, i) => (
+                    <div class="stat-card reveal" data-delay={String(i * 100)}>
+                        <span class="stat-icon">{stat.icon}</span>
+                        <span class="stat-value">{stat.value}</span>
+                        <span class="stat-label">{stat.label}</span>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-6);
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: var(--space-8) var(--space-4);
+        background: var(--color-bg);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--color-border);
+        transition:
+            transform var(--transition-base),
+            box-shadow var(--transition-base);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+        font-size: var(--fs-3xl);
+        display: block;
+        margin-bottom: var(--space-3);
+    }
+
+    .stat-value {
+        font-size: var(--fs-4xl);
+        font-weight: 800;
+        color: var(--color-primary);
+        display: block;
+        letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+        font-weight: 500;
+        margin-top: var(--space-2);
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+        .stat-card {
+            padding: var(--space-5) var(--space-3);
+        }
+        .stat-value {
+            font-size: var(--fs-2xl);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+        }
+    }
+</style>

@@ -1,0 +1,134 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const features = [
+    {
+        key: "1",
+        icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="6" width="7" height="16" rx="2" fill="#155dfc" opacity="0.2"/><rect x="11" y="10" width="7" height="12" rx="2" fill="#155dfc" opacity="0.4"/><rect x="20" y="3" width="7" height="19" rx="2" fill="#155dfc" opacity="0.7"/></svg>`,
+    },
+    {
+        key: "2",
+        icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#155dfc" stroke-width="2" opacity="0.3"/><path d="M10 14l3 3 6-6" stroke="#155dfc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    },
+    {
+        key: "3",
+        icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="5" width="22" height="18" rx="3" stroke="#155dfc" stroke-width="2" opacity="0.3"/><path d="M3 12h22" stroke="#155dfc" stroke-width="2"/><circle cx="8" cy="18" r="2" fill="#155dfc" opacity="0.6"/><circle cx="14" cy="18" r="2" fill="#155dfc"/></svg>`,
+    },
+    {
+        key: "4",
+        icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="8" cy="14" r="4" stroke="#155dfc" stroke-width="2" opacity="0.4"/><circle cx="20" cy="14" r="4" stroke="#155dfc" stroke-width="2" opacity="0.4"/><path d="M12 14h4" stroke="#155dfc" stroke-width="2" stroke-linecap="round"/></svg>`,
+    },
+    {
+        key: "5",
+        icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="6" width="22" height="3" rx="1.5" fill="#155dfc" opacity="0.2"/><rect x="3" y="12" width="16" height="3" rx="1.5" fill="#155dfc" opacity="0.4"/><rect x="3" y="18" width="20" height="3" rx="1.5" fill="#155dfc" opacity="0.7"/></svg>`,
+    },
+];
+---
+
+<section class="features section" id="features">
+    <div class="container">
+        <h2 class="section-title reveal">{t("features.title")}</h2>
+        <p class="section-sub reveal" data-delay="100">{t("features.sub")}</p>
+
+        <div class="features-grid">
+            {
+                features.map((f, i) => (
+                    <article
+                        class="feature-card reveal"
+                        data-delay={String(i * 80)}
+                    >
+                        <div class="feature-icon" set:html={f.icon} />
+                        <h3 class="feature-title">
+                            {t(`features.${f.key}.title` as any)}
+                        </h3>
+                        <p class="feature-desc">
+                            {t(`features.${f.key}.desc` as any)}
+                        </p>
+                    </article>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-6);
+    }
+
+    .feature-card {
+        padding: var(--space-8);
+        background: var(--color-surface);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--color-border);
+        transition:
+            transform var(--transition-base),
+            box-shadow var(--transition-base);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-primary-light);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--space-5);
+    }
+
+    .feature-title {
+        font-size: var(--fs-lg);
+        font-weight: 700;
+        margin-bottom: var(--space-3);
+        color: var(--color-text);
+    }
+
+    .feature-desc {
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+        line-height: 1.7;
+    }
+
+    @media (max-width: 1024px) {
+        .features-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .features-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+        .feature-card {
+            padding: var(--space-5);
+        }
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: var(--space-4);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

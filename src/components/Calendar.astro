@@ -1,0 +1,1160 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { data } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+import { environment } from "../config/environment";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const enableGoogleMeet = import.meta.env.PUBLIC_ENABLE_GOOGLE_MEET !== "false";
+const enableTeams = import.meta.env.PUBLIC_ENABLE_MICROSOFT_TEAMS !== "false";
+const scheduleTimezone =
+    import.meta.env.PUBLIC_SCHEDULE_TIMEZONE || "America/Bogota";
+---
+
+<section class="demo section-alt" id="demo">
+    <div class="container">
+        <h2 class="section-title reveal">{t("demo.title")}</h2>
+        <p class="section-sub reveal" data-delay="100">{t("demo.sub")}</p>
+
+        <div class="demo-engine reveal" data-delay="200">
+            <!-- Step 1: Platform -->
+            <div class="demo-step" id="demoStep1">
+                <h3 class="step-heading">
+                    <span class="step-badge">1</span>
+                    {t("demo.platform")}
+                </h3>
+                <div class="platform-selector">
+                    {
+                        enableGoogleMeet && (
+                            <label class="platform-option">
+                                <input
+                                    type="radio"
+                                    name="platform"
+                                    value="google-meet"
+                                    checked
+                                />
+                                <div class="platform-card">
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <rect
+                                            x="1"
+                                            y="5"
+                                            width="14"
+                                            height="14"
+                                            rx="2"
+                                            fill="#4285f4"
+                                            opacity="0.8"
+                                        />
+                                        <path
+                                            d="M15 9l6-3v12l-6-3"
+                                            fill="#34a853"
+                                            opacity="0.8"
+                                        />
+                                    </svg>
+                                    <span>{t("demo.googleMeet")}</span>
+                                </div>
+                            </label>
+                        )
+                    }
+                    {
+                        enableTeams && (
+                            <label class="platform-option">
+                                <input
+                                    type="radio"
+                                    name="platform"
+                                    value="teams"
+                                    checked={!enableGoogleMeet}
+                                />
+                                <div class="platform-card">
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <rect
+                                            x="2"
+                                            y="2"
+                                            width="20"
+                                            height="20"
+                                            rx="3"
+                                            fill="#5b5fc7"
+                                            opacity="0.8"
+                                        />
+                                        <path
+                                            d="M7 8h10v2H7zM7 12h8v2H7zM7 16h6v2H7z"
+                                            fill="#fff"
+                                            opacity="0.9"
+                                        />
+                                    </svg>
+                                    <span>{t("demo.teams")}</span>
+                                </div>
+                            </label>
+                        )
+                    }
+                </div>
+            </div>
+
+            <!-- Step 2: Calendar -->
+            <div class="demo-step" id="demoStep2">
+                <h3 class="step-heading">
+                    <span class="step-badge">2</span>
+                    {t("demo.selectDate")}
+                </h3>
+                <div class="calendar" id="calendar">
+                    <div class="cal-header">
+                        <button
+                            class="cal-nav"
+                            id="calPrev"
+                            aria-label="Previous month"
+                        >
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                ><path
+                                    d="M11 4l-5 5 5 5"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"></path></svg
+                            >
+                        </button>
+                        <span class="cal-month" id="calMonth"></span>
+                        <button
+                            class="cal-nav"
+                            id="calNext"
+                            aria-label="Next month"
+                        >
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                ><path
+                                    d="M7 4l5 5-5 5"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"></path></svg
+                            >
+                        </button>
+                    </div>
+                    <div class="cal-weekdays" id="calWeekdays"></div>
+                    <div class="cal-days" id="calDays"></div>
+                </div>
+            </div>
+
+            <!-- Step 3: Time -->
+            <div class="demo-step" id="demoStep3">
+                <h3 class="step-heading">
+                    <span class="step-badge">3</span>
+                    {t("demo.selectTime")}
+                </h3>
+                <div class="time-slots" id="timeSlots"></div>
+            </div>
+
+            <!-- Step 4: Form -->
+            <div class="demo-step" id="demoStep4">
+                <h3 class="step-heading">
+                    <span class="step-badge">4</span>
+                    {t("demo.formTitle")}
+                </h3>
+                <form class="demo-form" id="demoForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="demoName">{t("demo.name")}</label>
+                            <input type="text" id="demoName" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="demoBusiness"
+                                >{t("demo.business")}</label
+                            >
+                            <input type="text" id="demoBusiness" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="demoEmail">{t("demo.email")}</label>
+                            <input type="email" id="demoEmail" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="demoPhone">{t("demo.phone")}</label>
+                            <input type="tel" id="demoPhone" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="demoComment">{t("demo.comment")}</label>
+                        <textarea
+                            id="demoComment"
+                            maxlength={data.form.commentMaxLength}
+                            rows="3"></textarea>
+                        <span class="char-counter"
+                            ><span id="charCount">0</span>/{
+                                data.form.commentMaxLength
+                            }
+                            {t("demo.charCount")}</span
+                        >
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-lg submit-btn"
+                        id="demoSubmit"
+                    >
+                        {t("demo.submit")}
+                    </button>
+                    <p class="consent-text">
+                        {t("demo.consent")}
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal-overlay" id="statusModal" style="display:none;">
+    <div class="modal-content">
+        <button
+            class="modal-close"
+            id="closeModal"
+            type="button"
+            aria-label="Close">&times;</button
+        >
+        <div id="modalSuccess" style="display:none;" class="modal-state">
+            <svg
+                width="64"
+                height="64"
+                viewBox="0 0 48 48"
+                fill="none"
+                class="modal-icon"
+            >
+                <circle cx="24" cy="24" r="22" fill="#10b981" opacity="0.15"
+                ></circle>
+                <path
+                    class="animated-path"
+                    stroke-dasharray="50"
+                    stroke-dashoffset="50"
+                    d="M16 24l5 5 11-11"
+                    stroke="#10b981"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+            <p>{t("demo.success")}</p>
+            <div
+                id="meetLinksContainer"
+                class="meet-links"
+                style="display:none;"
+            >
+                <a
+                    id="calendarLinkBtn"
+                    href="#"
+                    target="_blank"
+                    class="meet-btn primary-meet"
+                    style="display:none;"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><rect x="3" y="4" width="18" height="18" rx="2" ry="2"
+                        ></rect><line x1="16" y1="2" x2="16" y2="6"></line><line
+                            x1="8"
+                            y1="2"
+                            x2="8"
+                            y2="6"></line><line x1="3" y1="10" x2="21" y2="10"
+                        ></line></svg
+                    >
+                    <span>{t("demo.buttonCalendar")}</span>
+                </a>
+                <a
+                    id="meetLinkBtn"
+                    href="#"
+                    target="_blank"
+                    class="meet-btn secondary-meet"
+                    style="display:none;"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        ><rect
+                            x="1"
+                            y="5"
+                            width="14"
+                            height="14"
+                            rx="2"
+                            fill="currentColor"></rect><path
+                            d="M15 9l6-3v12l-6-3"
+                            fill="currentColor"></path></svg
+                    >
+                    <span>{t("demo.buttonMeet")}</span>
+                </a>
+            </div>
+        </div>
+        <div id="modalError" style="display:none;" class="modal-state">
+            <svg
+                width="64"
+                height="64"
+                viewBox="0 0 48 48"
+                fill="none"
+                class="modal-icon"
+            >
+                <circle cx="24" cy="24" r="22" fill="#ef4444" opacity="0.15"
+                ></circle>
+                <path
+                    class="animated-path"
+                    stroke-dasharray="50"
+                    stroke-dashoffset="50"
+                    d="M16 16l16 16M32 16L16 32"
+                    stroke="#ef4444"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+            <p>
+                {t("demo.error")}
+            </p>
+        </div>
+    </div>
+</div>
+
+<script
+    define:vars={{
+        lang,
+        scheduleTimezone,
+        environment,
+        i18nAlert: t("demo.bookingAlert"),
+        i18nBookingTx: t("demo.bookingText"),
+        i18nEmptyDate: t("demo.emptyDate"),
+        i18nDemoTitle: t("demo.bookingTitle"),
+        i18nDemoDetails: t("demo.bookingDetails"),
+        i18nDemoName: t("demo.bookingName"),
+        i18nDemoBusiness: t("demo.bookingEmpresa"),
+        i18nDemoEmail: t("demo.bookingEmail"),
+        i18nDemoPhone: t("demo.bookingPhone"),
+        i18nNoSlots: t("demo.noSlots"),
+    }}
+>
+    // ── Calendar Logic ──
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+    let selectedDate = null;
+    let monthAvailability = [];
+
+    const weekdayLabels =
+        lang === "es"
+            ? ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+            : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const monthNames =
+        lang === "es"
+            ? [
+                  "Enero",
+                  "Febrero",
+                  "Marzo",
+                  "Abril",
+                  "Mayo",
+                  "Junio",
+                  "Julio",
+                  "Agosto",
+                  "Septiembre",
+                  "Octubre",
+                  "Noviembre",
+                  "Diciembre",
+              ]
+            : [
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December",
+              ];
+
+    async function fetchAvailability() {
+        const monthStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`;
+        try {
+            const res = await fetch(
+                `${environment.apiUrl}${environment.endpoints.availability}?month=${monthStr}&timezone=${encodeURIComponent(scheduleTimezone)}`,
+            );
+            if (res.ok) {
+                const data = await res.json();
+                monthAvailability = data.days || [];
+            } else {
+                monthAvailability = [];
+            }
+        } catch (e) {
+            console.error("Failed to fetch availability", e);
+            monthAvailability = [];
+        }
+        renderCalendar();
+    }
+
+    function renderWeekdays() {
+        const container = document.getElementById("calWeekdays");
+        if (!container) return;
+        container.innerHTML = weekdayLabels
+            .map((d) => `<span class="cal-wd">${d}</span>`)
+            .join("");
+    }
+
+    function renderCalendar() {
+        const monthEl = document.getElementById("calMonth");
+        const daysEl = document.getElementById("calDays");
+        if (!monthEl || !daysEl) return;
+
+        monthEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        // Sunday = 0, which matches firstDay.getDay()
+        let startDay = firstDay.getDay();
+
+        const daysInMonth = new Date(
+            currentYear,
+            currentMonth + 1,
+            0,
+        ).getDate();
+
+        let html = "";
+
+        // Empty cells
+        for (let i = 0; i < startDay; i++) {
+            html += '<span class="cal-day empty"></span>';
+        }
+
+        // Map available dates for quick lookup
+        const availableDates = monthAvailability.map((d) => d.date);
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const date = new Date(currentYear, currentMonth, d);
+            const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+            const dayOfWeek = date.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            const isPast = date < today;
+
+            // Disable if it's weekend, past, or NOT in the API availability list
+            const isDisabled =
+                isWeekend || isPast || !availableDates.includes(dateString);
+            const isSelected =
+                selectedDate && date.getTime() === selectedDate.getTime();
+
+            let cls = "cal-day";
+            if (isDisabled) cls += " disabled";
+            if (isSelected) cls += " selected";
+            if (date.getTime() === today.getTime()) cls += " today";
+
+            html += `<button class="${cls}" ${isDisabled ? "disabled" : ""} data-date="${date.toISOString()}">${d}</button>`;
+        }
+
+        daysEl.innerHTML = html;
+
+        // Attach click handlers
+        daysEl
+            .querySelectorAll(".cal-day:not(.disabled):not(.empty)")
+            .forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    selectedDate = new Date(btn.dataset.date);
+                    renderCalendar();
+                    renderTimeSlots();
+                });
+            });
+    }
+
+    document.getElementById("calPrev")?.addEventListener("click", () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        selectedDate = null;
+        renderTimeSlots(); // clear slots
+        fetchAvailability();
+    });
+
+    document.getElementById("calNext")?.addEventListener("click", () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        selectedDate = null;
+        renderTimeSlots(); // clear slots
+        fetchAvailability();
+    });
+
+    // ── Time Slots ──
+    function renderTimeSlots() {
+        const container = document.getElementById("timeSlots");
+        if (!container) return;
+
+        if (!selectedDate) {
+            container.innerHTML = `<p class="empty-state">${i18nEmptyDate}</p>`;
+            return;
+        }
+
+        const dateString = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`;
+        const dayData = monthAvailability.find((d) => d.date === dateString);
+
+        if (
+            !dayData ||
+            !dayData.available_slots ||
+            dayData.available_slots.length === 0
+        ) {
+            container.innerHTML = `<p class="empty-state">${i18nNoSlots}</p>`;
+            return;
+        }
+
+        container.innerHTML = dayData.available_slots
+            .map((slot) => {
+                const startDate = new Date(slot.start);
+                const timeString = `${startDate.getHours().toString().padStart(2, "0")}:${startDate.getMinutes().toString().padStart(2, "0")}`;
+                return `<button type="button" class="time-slot" data-time="${timeString}">${timeString}</button>`;
+            })
+            .join("");
+
+        container.querySelectorAll(".time-slot").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                container
+                    .querySelectorAll(".time-slot")
+                    .forEach((b) => b.classList.remove("selected"));
+                btn.classList.add("selected");
+            });
+        });
+    }
+
+    // ── Character Counter ──
+    const commentEl = document.getElementById("demoComment");
+    const charCountEl = document.getElementById("charCount");
+    commentEl?.addEventListener("input", () => {
+        if (charCountEl)
+            charCountEl.textContent = commentEl.value.length.toString();
+    });
+
+    // ── Form Submit ──
+    document
+        .getElementById("demoForm")
+        ?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("demoName")?.value || "";
+            const business =
+                document.getElementById("demoBusiness")?.value || "";
+            const email = document.getElementById("demoEmail")?.value || "";
+            const phone = document.getElementById("demoPhone")?.value || "";
+            const comment = document.getElementById("demoComment")?.value || "";
+
+            const selectedTimeBtn = document.querySelector(
+                ".time-slot.selected",
+            );
+            if (!selectedDate || !selectedTimeBtn) {
+                alert(i18nAlert);
+                return;
+            }
+
+            const timeStr = selectedTimeBtn.dataset.time; // e.g. "15:00"
+            const [hours, minutes] = timeStr.split(":").map(Number);
+
+            const startTime = new Date(selectedDate);
+            startTime.setHours(hours, minutes, 0, 0);
+
+            const endTime = new Date(startTime);
+            endTime.setHours(endTime.getHours() + 1);
+
+            const companyName =
+                business.trim() !== "" ? business.trim() : name.trim();
+            const title = i18nDemoTitle + companyName;
+
+            const description =
+                (comment ? comment.trim() + "\n\n" : "") +
+                i18nDemoDetails +
+                "\n" +
+                i18nDemoName +
+                " " +
+                name +
+                "\n" +
+                i18nDemoBusiness +
+                " " +
+                business +
+                "\n" +
+                i18nDemoEmail +
+                " " +
+                email +
+                "\n" +
+                i18nDemoPhone +
+                " " +
+                phone;
+
+            const payload = {
+                title: title,
+                description: description,
+                start_time: startTime.toISOString(),
+                end_time: endTime.toISOString(),
+                attendees: [email],
+            };
+
+            const submitBtn = document.getElementById("demoSubmit");
+            const originalText = submitBtn ? submitBtn.textContent : "";
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = i18nBookingTx;
+            }
+
+            let success = false;
+            let responseData = null;
+            try {
+                const res = await fetch(
+                    `${environment.apiUrl}${environment.endpoints.sessions}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    },
+                );
+                if (res.ok) {
+                    const text = await res.text();
+                    if (text) {
+                        try {
+                            responseData = JSON.parse(text);
+                        } catch (e) {}
+                    }
+                    if (
+                        !responseData ||
+                        responseData.status === "confirmed" ||
+                        res.status === 200 ||
+                        res.status === 201
+                    ) {
+                        success = true;
+                    }
+                }
+            } catch (err) {
+                console.error("Error booking demo:", err);
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+
+            const modal = document.getElementById("statusModal");
+            const modalSuccess = document.getElementById("modalSuccess");
+            const modalError = document.getElementById("modalError");
+
+            if (modal && modalSuccess && modalError) {
+                modal.style.display = "flex";
+                document.body.style.overflow = "hidden"; // Prevent scrolling
+                // trigger reflow for opacity transition
+                setTimeout(() => modal.classList.add("active"), 10);
+
+                if (success) {
+                    modalSuccess.style.display = "flex";
+                    modalError.style.display = "none";
+
+                    const meetLinksContainer =
+                        document.getElementById("meetLinksContainer");
+                    const meetLinkBtn = document.getElementById("meetLinkBtn");
+                    const calendarLinkBtn =
+                        document.getElementById("calendarLinkBtn");
+
+                    if (
+                        meetLinksContainer &&
+                        responseData &&
+                        (responseData.meet_link || responseData.html_link)
+                    ) {
+                        meetLinksContainer.style.display = "flex";
+                        if (responseData.meet_link && meetLinkBtn) {
+                            meetLinkBtn.href = responseData.meet_link;
+                            meetLinkBtn.style.display = "flex";
+                        } else if (meetLinkBtn) {
+                            meetLinkBtn.style.display = "none";
+                        }
+                        if (responseData.html_link && calendarLinkBtn) {
+                            calendarLinkBtn.href = responseData.html_link;
+                            calendarLinkBtn.style.display = "flex";
+                        } else if (calendarLinkBtn) {
+                            calendarLinkBtn.style.display = "none";
+                        }
+                    } else if (meetLinksContainer) {
+                        meetLinksContainer.style.display = "none";
+                    }
+
+                    document.getElementById("demoForm")?.reset();
+                    selectedDate = null;
+                    renderCalendar();
+                    renderTimeSlots();
+                    fetchAvailability();
+                } else {
+                    modalSuccess.style.display = "none";
+                    modalError.style.display = "flex";
+                }
+            }
+        });
+
+    document.getElementById("closeModal")?.addEventListener("click", () => {
+        const modal = document.getElementById("statusModal");
+        if (modal) {
+            modal.classList.remove("active");
+            document.body.style.overflow = ""; // Restore scrolling
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        }
+    });
+
+    // ── Init ──
+    renderWeekdays();
+    fetchAvailability();
+    renderTimeSlots();
+</script>
+
+<style>
+    .demo-engine {
+        width: 100%;
+        margin: 0 auto;
+        background: var(--color-surface);
+        border-radius: var(--radius-2xl);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .demo-step {
+        padding: var(--space-8);
+        border-bottom: 1px solid var(--color-border);
+    }
+    .demo-step:last-child {
+        border-bottom: none;
+    }
+
+    .step-heading {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        font-size: var(--fs-lg);
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: var(--space-5);
+    }
+
+    .step-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: var(--radius-full);
+        background: var(--color-primary);
+        color: #fff;
+        font-size: var(--fs-xs);
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    /* ── Platform Selector ── */
+    .platform-selector {
+        display: flex;
+        gap: var(--space-4);
+        width: 100%;
+    }
+
+    .platform-option {
+        flex: 1;
+    }
+
+    .platform-option input {
+        display: none;
+    }
+
+    .consent-text {
+        font-size: var(--fs-xs, 0.75rem);
+        color: var(--color-text-muted, #737373);
+        text-align: center;
+        margin-top: var(--space-4, 1rem);
+        line-height: 1.4;
+    }
+
+    .platform-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-3);
+        padding: var(--space-4) var(--space-5);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        color: var(--color-text);
+        box-sizing: border-box;
+        height: 100%;
+    }
+
+    .platform-option input:checked + .platform-card {
+        border-color: var(--color-primary);
+        background: var(--color-primary-light);
+    }
+
+    .platform-card:hover {
+        border-color: var(--color-primary);
+    }
+
+    /* ── Calendar ── */
+    .calendar {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .cal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-3) var(--space-4);
+        background: var(--color-gray-100);
+    }
+
+    .cal-month {
+        font-weight: 700;
+        font-size: var(--fs-base);
+        color: var(--color-text);
+    }
+
+    .cal-nav {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-md);
+        color: var(--color-text-muted);
+        transition: all var(--transition-fast);
+    }
+    .cal-nav:hover {
+        background: var(--color-gray-200);
+        color: var(--color-text);
+    }
+
+    .cal-weekdays,
+    .cal-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    :global(.cal-wd) {
+        padding: var(--space-2);
+        text-align: center;
+        font-size: var(--fs-xs);
+        font-weight: 600;
+        color: var(--color-text-muted);
+        background: var(--color-gray-100);
+    }
+
+    :global(.cal-day) {
+        padding: var(--space-2);
+        padding-top: var(--space-4);
+        padding-bottom: var(--space-4);
+        text-align: center;
+        font-size: var(--fs-sm);
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        transition: all var(--transition-fast);
+        font-family: var(--font-family);
+        color: var(--color-text);
+    }
+
+    :global(.cal-day.empty) {
+        cursor: default;
+    }
+
+    :global(.cal-day:not(.disabled):not(.empty):hover) {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+    }
+
+    :global(.cal-day.selected) {
+        background: var(--color-primary) !important;
+        color: #fff !important;
+        font-weight: 600;
+    }
+
+    :global(.cal-day.today:not(.selected)) {
+        border: 2px solid var(--color-primary);
+        font-weight: 600;
+    }
+
+    :global(.cal-day.disabled) {
+        color: var(--color-gray-300);
+        cursor: not-allowed;
+    }
+
+    /* ── Time Slots ── */
+    .time-slots {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-2);
+    }
+
+    :global(.time-slot) {
+        padding: var(--space-2) var(--space-3);
+        padding-top: var(--space-4);
+        padding-bottom: var(--space-4);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-bg);
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        text-align: center;
+        font-family: var(--font-family);
+        color: var(--color-text);
+    }
+
+    :global(.time-slot:hover) {
+        border-color: var(--color-primary);
+        background: var(--color-primary-light);
+    }
+
+    :global(.time-slot.selected) {
+        background: var(--color-primary);
+        color: #fff;
+        border-color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    :global(.empty-state) {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+        text-align: center;
+        padding: var(--space-6) var(--space-4);
+        color: var(--color-text-muted);
+        font-size: var(--fs-base);
+        font-weight: 500;
+        background: var(--color-gray-50, #f9fafb);
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-lg);
+        margin: 0;
+        opacity: 0.8;
+    }
+
+    /* ── Form ── */
+    .demo-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-4);
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+    }
+
+    .form-group label {
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: var(--space-3) var(--space-4);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-bg);
+        transition:
+            border-color var(--transition-fast),
+            box-shadow var(--transition-fast);
+        color: var(--color-text);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(21, 93, 252, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .char-counter {
+        font-size: var(--fs-xs);
+        color: var(--color-text-muted);
+        text-align: right;
+        margin-top: var(--space-1);
+    }
+
+    .submit-btn {
+        width: 100%;
+        margin-top: var(--space-2);
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        opacity: 0;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(6px);
+    }
+    .meet-links {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        margin-top: var(--space-4);
+        width: 100%;
+    }
+    .meet-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: var(--fs-base);
+        text-decoration: none;
+        transition: all var(--transition-fast);
+        width: 100%;
+        color: inherit;
+    }
+    .primary-meet {
+        background: var(--color-primary, #4285f4);
+        color: #fff;
+    }
+    .primary-meet:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+    .secondary-meet {
+        background: var(--color-gray-100, #f3f4f6);
+        color: var(--color-text, #1f2937);
+        border: 1px solid var(--color-border, #e5e7eb);
+    }
+    .secondary-meet:hover {
+        background: var(--color-gray-200, #e5e7eb);
+    }
+    .modal-overlay.active {
+        opacity: 1;
+    }
+    .modal-content {
+        background: var(--color-surface, #fff);
+        padding: var(--space-8);
+        border-radius: var(--radius-xl);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: var(--shadow-xl);
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+    }
+    .modal-overlay.active .modal-content {
+        transform: scale(1);
+    }
+    .modal-close {
+        position: absolute;
+        top: var(--space-4);
+        right: var(--space-4);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text-muted);
+        font-size: 24px;
+        line-height: 1;
+        padding: var(--space-1);
+    }
+    .modal-close:hover {
+        color: var(--color-text);
+    }
+    .modal-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-4);
+    }
+    .modal-state p {
+        font-size: var(--fs-lg);
+        font-weight: 600;
+        margin: 0;
+    }
+    #modalSuccess p {
+        color: #10b981;
+    }
+    #modalError p {
+        color: #ef4444;
+    }
+    .animated-path {
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+    }
+    .modal-overlay.active .animated-path {
+        animation: drawPath 0.5s ease forwards 0.2s;
+    }
+    @keyframes drawPath {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .platform-selector {
+            flex-direction: column;
+        }
+        .time-slots {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        .demo-step {
+            padding: var(--space-5);
+        }
+    }
+</style>

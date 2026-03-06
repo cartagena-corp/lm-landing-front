@@ -1,0 +1,481 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { useTranslations, getAlternateLang } from "../i18n/utils";
+import USIcon from "./assets/USIcon.astro";
+import ESIcon from "./assets/ESIcon.astro";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const altLang = getAlternateLang(lang);
+---
+
+<nav class="navbar" id="navbar">
+    <div class="nav-container container">
+        <a href={`/${lang}/`} class="nav-logo">
+            <img
+                class="logo-icon"
+                width="40"
+                height="40"
+                src="/favicon-light.webp"
+                alt="LA MURALLA Logo"
+            />
+            <span class="font-logo">LA MURALLA</span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href={`/${lang}/#features`}>{t("nav.features")}</a></li>
+            <li><a href={`/${lang}/#workflow`}>{t("nav.workflow")}</a></li>
+            <li>
+                <a href={`/${lang}/#testimonials`}>{t("nav.testimonials")}</a>
+            </li>
+            <li><a href={`/${lang}/#demo`}>{t("nav.demo")}</a></li>
+            <!-- Mobile-only CTA group -->
+            <li class="mobile-cta-group">
+                <div class="mobile-lang-options">
+                    <a
+                        href="/es/"
+                        class={`lang-option-mobile ${lang === "es" ? "active" : ""}`}
+                    >
+                        <ESIcon size="20" />
+                        <span>ES</span>
+                    </a>
+                    <a
+                        href="/en/"
+                        class={`lang-option-mobile ${lang === "en" ? "active" : ""}`}
+                    >
+                        <USIcon size="20" />
+                        <span>EN</span>
+                    </a>
+                </div>
+                <a
+                    href="https://www.cartagenacorporation.com/login"
+                    class="btn btn-secondary nav-btn-mobile"
+                    >{t("nav.signIn")}</a
+                >
+                <a
+                    href={`/${lang}/#demo`}
+                    class="btn btn-primary nav-btn-mobile"
+                    >{t("nav.startFree")}</a
+                >
+            </li>
+        </ul>
+
+        <div class="nav-actions">
+            <div class="lang-dropdown-wrapper">
+                <button
+                    class="lang-switch-btn"
+                    aria-label="Select language"
+                    id="langSwitchBtn"
+                >
+                    {
+                        lang === "en" ? (
+                            <USIcon size="20" />
+                        ) : (
+                            <ESIcon size="20" />
+                        )
+                    }
+                    <span>{lang.toUpperCase()}</span>
+                    <svg
+                        class="chevron-down"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="m6 9 6 6 6-6"></path></svg
+                    >
+                </button>
+                <div class="lang-dropdown-menu" id="langDropdownMenu">
+                    <a
+                        href="/es/"
+                        class={`lang-option ${lang === "es" ? "active" : ""}`}
+                    >
+                        <ESIcon size="20" />
+                        <span>ES</span>
+                    </a>
+                    <a
+                        href="/en/"
+                        class={`lang-option ${lang === "en" ? "active" : ""}`}
+                    >
+                        <USIcon size="20" />
+                        <span>EN</span>
+                    </a>
+                </div>
+            </div>
+            <a
+                href="https://www.cartagenacorporation.com/login"
+                class="btn btn-secondary nav-btn">{t("nav.signIn")}</a
+            >
+            <a href={`/${lang}/#demo`} class="btn btn-primary nav-btn"
+                >{t("nav.startFree")}</a
+            >
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<script>
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("navLinks");
+
+    hamburger?.addEventListener("click", () => {
+        navLinks?.classList.toggle("open");
+        hamburger.classList.toggle("active");
+    });
+
+    // Close mobile menu when a link is clicked
+    navLinks?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            navLinks.classList.remove("open");
+            hamburger?.classList.remove("active");
+        });
+    });
+
+    // Language Dropdown Toggle
+    const langBtn = document.getElementById("langSwitchBtn");
+    const langMenu = document.getElementById("langDropdownMenu");
+
+    langBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        langMenu?.classList.toggle("show");
+        langBtn?.classList.toggle("active");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (
+            !langBtn?.contains(e.target as Node) &&
+            !langMenu?.contains(e.target as Node)
+        ) {
+            langMenu?.classList.remove("show");
+            langBtn?.classList.remove("active");
+        }
+    });
+
+    // Navbar background on scroll
+    const navbar = document.getElementById("navbar");
+    const handleScroll = () => {
+        if (window.scrollY > 10) {
+            navbar?.classList.add("scrolled");
+        } else {
+            navbar?.classList.remove("scrolled");
+        }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Initialize scroll state on load
+    handleScroll();
+</script>
+
+<style>
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: var(--nav-height);
+        display: flex;
+        align-items: center;
+        transition:
+            background var(--transition-base),
+            box-shadow var(--transition-base);
+    }
+
+    .navbar.scrolled {
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        font-size: var(--fs-xl);
+        font-weight: 800;
+        color: var(--color-text);
+        letter-spacing: -0.02em;
+        flex-shrink: 0;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: var(--space-8);
+    }
+
+    .nav-links a {
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        color: var(--color-text-muted);
+        transition: color var(--transition-fast);
+        position: relative;
+    }
+
+    .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--color-primary);
+        transition: width var(--transition-base);
+        border-radius: 1px;
+    }
+
+    .nav-links a:hover {
+        color: var(--color-primary);
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .lang-dropdown-wrapper {
+        position: relative;
+    }
+
+    .lang-switch-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 var(--space-3);
+        height: 36px;
+        border-radius: var(--radius-md);
+        font-size: var(--fs-xs);
+        font-weight: 600;
+        color: var(--color-text-muted);
+        border: 1px solid var(--color-border);
+        transition: all var(--transition-fast);
+        gap: var(--space-2);
+        background: transparent;
+        cursor: pointer;
+    }
+
+    .lang-switch-btn:hover,
+    .lang-switch-btn.active {
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+        background: var(--color-primary-light);
+    }
+
+    .lang-switch-btn .chevron-down {
+        transition: transform var(--transition-fast);
+    }
+
+    .lang-switch-btn.active .chevron-down {
+        transform: rotate(180deg);
+    }
+
+    .lang-dropdown-menu {
+        position: absolute;
+        top: calc(100% + var(--space-2));
+        right: 0;
+        background: white;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        padding: var(--space-1);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 100px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all var(--transition-fast);
+        z-index: 100;
+    }
+
+    .lang-dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .lang-option {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--fs-xs);
+        font-weight: 500;
+        color: var(--color-text-muted);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
+
+    .lang-option:hover {
+        background: var(--color-bg-alt);
+        color: var(--color-text);
+    }
+
+    .lang-option.active {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    .nav-btn {
+        padding: var(--space-2) var(--space-5);
+        font-size: var(--fs-sm);
+    }
+
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        padding: var(--space-2);
+    }
+
+    .hamburger span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--color-text);
+        border-radius: 2px;
+        transition: all var(--transition-base);
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* ── Mobile CTA group (shown only in mobile menu) ── */
+    .mobile-cta-group {
+        display: none;
+    }
+
+    .lang-switch-mobile {
+        display: none;
+    }
+
+    .nav-btn-mobile {
+        display: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1200px) {
+        .nav-links {
+            position: fixed;
+            top: var(--nav-height);
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-5);
+            padding: var(--space-6) var(--space-4) var(--space-8);
+            transform: translateY(-120%);
+            transition: transform var(--transition-base);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-links.open {
+            transform: translateY(0);
+        }
+
+        .nav-links a {
+            font-size: var(--fs-base);
+        }
+
+        .nav-links a::after {
+            display: none;
+        }
+
+        .hamburger {
+            display: flex;
+        }
+
+        /* Hide desktop nav actions */
+        .nav-btn,
+        .lang-dropdown-wrapper {
+            display: none;
+        }
+
+        /* Show the mobile CTA group inside the mobile menu */
+        .mobile-cta-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-3);
+            width: 100%;
+            padding-top: var(--space-4);
+            margin-top: var(--space-2);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .mobile-lang-options {
+            display: flex;
+            gap: var(--space-2);
+            justify-content: center;
+            width: 100%;
+        }
+
+        .lang-option-mobile {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            color: var(--color-text-muted);
+            border: 1px solid var(--color-border);
+            transition: all var(--transition-fast);
+        }
+
+        .lang-option-mobile:hover {
+            border-color: var(--color-primary-light);
+            background: var(--color-bg-alt);
+        }
+
+        .lang-option-mobile.active {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: var(--color-primary-light);
+        }
+
+        .nav-btn-mobile {
+            display: inline-flex;
+            width: 100%;
+            max-width: 280px;
+            justify-content: center;
+            padding: var(--space-3) var(--space-6);
+            font-size: var(--fs-base);
+        }
+    }
+</style>

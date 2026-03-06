@@ -1,0 +1,131 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { useTranslations, getAlternateLang } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const altLang = getAlternateLang(lang);
+---
+
+<!doctype html>
+<html lang={lang}>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={t("seo.description")} />
+        <meta name="keywords" content={t("seo.keywords")} />
+        <meta name="generator" content={Astro.generator} />
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+
+        <!-- i18n hreflang -->
+        <link rel="alternate" hreflang="es" href="/es/" />
+        <link rel="alternate" hreflang="en" href="/en/" />
+        <link rel="alternate" hreflang="x-default" href="/es/" />
+
+        <!-- Preconnect for Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <title>{t("seo.title")}</title>
+
+        <!-- Canonical URL -->
+        <link
+            rel="canonical"
+            href={new URL(
+                Astro.url.pathname,
+                Astro.site || "https://lamuralla.com",
+            )}
+        />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={Astro.url} />
+        <meta property="og:title" content={t("seo.title")} />
+        <meta property="og:description" content={t("seo.description")} />
+        <meta property="og:image" content="/favicon-light.webp" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={Astro.url} />
+        <meta property="twitter:title" content={t("seo.title")} />
+        <meta property="twitter:description" content={t("seo.description")} />
+        <meta property="twitter:image" content="/favicon-light.webp" />
+
+        <!-- JSON-LD Structured Data -->
+        <script type="application/ld+json" is:inline>
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "SoftwareApplication",
+                        "name": "LA MURALLA",
+                        "applicationCategory": "BusinessApplication",
+                        "operatingSystem": "Web",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        }
+                    },
+                    {
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "¿Es LA MURALLA una buena alternativa a Jira?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Sí, es un gestor de tareas moderno y rápido, ideal para equipos ágiles."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What is LA MURALLA?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "LA MURALLA is a project management tool and kanban software designed as a fast alternative to Jira."
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        </script>
+    </head>
+    <body>
+        <slot />
+
+        <!-- Scroll Reveal Observer -->
+        <script>
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const el = entry.target as HTMLElement;
+                            const delay = el.dataset.delay || "0";
+                            setTimeout(() => {
+                                el.classList.add("visible");
+                            }, parseInt(delay));
+                            observer.unobserve(el);
+                        }
+                    });
+                },
+                { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+            );
+
+            document
+                .querySelectorAll(".reveal")
+                .forEach((el) => observer.observe(el));
+        </script>
+    </body>
+</html>
+
+<style is:global>
+    @import "../styles/global.css";
+</style>

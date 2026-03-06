@@ -1,0 +1,142 @@
+---
+import type { LangKey } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: LangKey;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const steps = [
+    {
+        num: "01",
+        title: t("workflow.1.title"),
+        desc: t("workflow.1.desc"),
+        icon: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#155dfc" stroke-width="2" opacity="0.15"/><path d="M12 16l3 3 6-6" stroke="#155dfc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    },
+    {
+        num: "02",
+        title: t("workflow.2.title"),
+        desc: t("workflow.2.desc"),
+        icon: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="5" y="7" width="22" height="18" rx="3" stroke="#155dfc" stroke-width="2" opacity="0.15"/><path d="M5 13h22" stroke="#155dfc" stroke-width="2"/><rect x="9" y="17" width="6" height="4" rx="1" fill="#155dfc" opacity="0.4"/><rect x="18" y="17" width="5" height="4" rx="1" fill="#155dfc" opacity="0.2"/></svg>`,
+    },
+    {
+        num: "03",
+        title: t("workflow.3.title"),
+        desc: t("workflow.3.desc"),
+        icon: `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4v24M4 16h24" stroke="#155dfc" stroke-width="2" opacity="0.15"/><circle cx="16" cy="16" r="6" stroke="#155dfc" stroke-width="2"/><circle cx="16" cy="16" r="2" fill="#155dfc"/></svg>`,
+    },
+];
+---
+
+<section class="workflow section-alt" id="workflow">
+    <div class="container">
+        <h2 class="section-title reveal">{t("workflow.title")}</h2>
+        <p class="section-sub reveal" data-delay="100">{t("workflow.sub")}</p>
+
+        <div class="workflow-grid">
+            {
+                steps.map((step, i) => (
+                    <div
+                        class="workflow-step reveal"
+                        data-delay={String(i * 150)}
+                    >
+                        <div class="step-number">{step.num}</div>
+                        <div class="step-icon" set:html={step.icon} />
+                        <h3 class="step-title">{step.title}</h3>
+                        <p class="step-desc">{step.desc}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .workflow-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-8);
+        position: relative;
+    }
+
+    .workflow-grid::before {
+        content: "";
+        position: absolute;
+        top: 72px;
+        left: 16.67%;
+        right: 16.67%;
+        height: 2px;
+        background: linear-gradient(
+            90deg,
+            var(--color-primary),
+            var(--color-accent)
+        );
+        opacity: 0.2;
+        z-index: 0;
+    }
+
+    .workflow-step {
+        text-align: center;
+        position: relative;
+        top: 24px;
+        z-index: 1;
+        padding: var(--space-6);
+    }
+
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-full);
+        background: linear-gradient(
+            135deg,
+            var(--color-primary),
+            var(--color-accent)
+        );
+        color: #fff;
+        font-size: var(--fs-lg);
+        font-weight: 800;
+        margin-bottom: var(--space-5);
+        box-shadow: 0 4px 15px rgba(21, 93, 252, 0.25);
+    }
+
+    .step-icon {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-primary-light);
+        border-radius: var(--radius-lg);
+        margin: 0 auto var(--space-5);
+    }
+
+    .step-title {
+        font-size: var(--fs-xl);
+        font-weight: 700;
+        margin-bottom: var(--space-3);
+        color: var(--color-text);
+    }
+
+    .step-desc {
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+        line-height: 1.7;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+        .workflow-grid {
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+        }
+        .workflow-grid::before {
+            display: none;
+        }
+    }
+</style>
