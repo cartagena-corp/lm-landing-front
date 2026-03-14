@@ -1,6 +1,7 @@
 ---
 import type { LangKey } from "../i18n/ui";
 import { useTranslations, getAlternateLang } from "../i18n/utils";
+import PostHog from "../components/PostHog.astro";
 
 interface Props {
     lang: LangKey;
@@ -56,6 +57,9 @@ const altLang = getAlternateLang(lang);
         <meta property="twitter:title" content={t("seo.title")} />
         <meta property="twitter:description" content={t("seo.description")} />
         <meta property="twitter:image" content="/favicon-light.webp" />
+
+        <!-- PostHog Analytics -->
+        <PostHog />
 
         <!-- JSON-LD Structured Data -->
         <script type="application/ld+json" is:inline>
